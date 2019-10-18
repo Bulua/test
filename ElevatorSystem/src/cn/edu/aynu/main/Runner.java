@@ -4,8 +4,16 @@ import cn.edu.aynu.entity.Building;
 import cn.edu.aynu.entity.Elevator;
 import cn.edu.aynu.entity.People;
 
+import java.awt.Button;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.time.Period;
 import java.util.*;
+
+import javax.swing.JFrame;
 
 public class Runner {
 
@@ -20,12 +28,13 @@ public class Runner {
     private static void run(Building building) throws InterruptedException {
         //获取楼层电梯对象
         Elevator elevator = building.getElevator();
+        List<People> peoples = null;
+        Set<Integer> floors;
         System.out.println("该楼最高"+Building.TOP_FLOOR+"层，最低为"+Building.BOTTOM_FLOOR+"层");
         while (true) {
             System.out.println("当前是" + Elevator.floor + "楼，电梯状态：" + elevator.getStatus());
             //获取要去的楼层集合
-            Set<Integer> floors = getFloors();
-            List<People> peoples;
+            floors = getFloors();
             peoples = enterElevator();
             elevator.setPeoples(peoples);
             //电梯开始运行
@@ -84,7 +93,7 @@ public class Runner {
         System.out.println("---------");
         Thread.sleep(1000);
         if (floors.contains(Elevator.floor)){
-            System.out.println("到达" + Elevator.floor + "楼，开门");
+            System.err.println("到达" + Elevator.floor + "楼，开门");
             elevator.setPeoples(enterElevator());
             floors.remove(Elevator.floor);
         }
@@ -121,6 +130,53 @@ public class Runner {
         if (floors.size() <= 0){ floors.add(Elevator.floor); }
         if (floors.contains(Elevator.floor)) { floors.remove(Elevator.floor); }
         return floors;
+    }
+    
+    private static Set<Integer> getFloors2(){
+    	Set<Integer> floors = new HashSet<>();
+    	JFrame jFrame = new JFrame();
+    	jFrame.setSize(800, 800);
+    	jFrame.setLayout(new FlowLayout());
+    	for(int i=Building.BOTTOM_FLOOR; i <= Building.TOP_FLOOR; i++){
+    		jFrame.add(new Button(i+"楼"));
+    	}
+    	Button run = new Button("RUN"); 
+    	jFrame.add(run);
+    	jFrame.setVisible(true);
+    	run.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				floors.add(1);
+			}
+		});
+    	return floors;
+    	
     }
 
     /**
